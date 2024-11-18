@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poetry Slam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title-card center">
+        <h1 class="title-heading">Welcome to Poetry Slam</h1>
+        <p class="title-text">
+            Click to generate an acrostic poem based on a randomly chosen topic
+        </p>
+        <br>
+        <button class="generate-btn-pushable center" role="button">
+            <span class="generate-btn-shadow"></span>
+            <span class="generate-btn-edge"></span>
+            <span class="generate-btn-front text">
+                Generate Your Poem!
+            </span>
+        </button>
+    </div>
+    <br>
+    <br>
+    <div class="generated-container center">
+        <span id="poem-generation">
+        </span>
+    </div>
+    <div id="cursor"></div>
+    <script src="scripts/typewriter.js"></script>
+    <script src="scripts/mousehover-effect.js"></script>
+</body>
+</html>
