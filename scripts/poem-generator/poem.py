@@ -14,6 +14,7 @@ class Poem:
         self.pattern = ""
         self.num_sentences = 0
         self.sentences = []
+        self.pattern_dict = {}
         
         self.generate_topic()
         self.generate_pattern()
@@ -22,8 +23,20 @@ class Poem:
 
 
         for i in range(0, len(self.secret)):
-            sent = Sentence(self.pattern[i], self.secret[i], self.secret)
-            new_sentence = sent.generate_sentence()
+            sent = ""
+            if i == 0 or len(self.pattern_dict[self.pattern[i]]) == 0:
+                sent = Sentence(self.pattern[i], self.secret[i], self.secret, "")
+            else:
+                random_rhyme = self.pattern_dict[self.pattern[i]]
+                print("matching pattern!", random_rhyme)
+                sent = Sentence(self.pattern[i], self.secret[i], self.secret, random.choice(random_rhyme))
+            sent.generate_sentence()
+            
+            self.sentences.append(str(sent))
+            # print(sent)
+            last_word = str(sent).split(" ")[-1]
+            self.update_pattern_dict(self.pattern[i], last_word)
+
     
     def generate_topic(self):
         # self.secret = random.choice(self.POSSIBLE_TOPICS)
@@ -37,7 +50,7 @@ class Poem:
         self.key_narrative_elems = self.create_tuple_list(word_list)
 
     def generate_pattern(self):
-        possible_patterns = ["A", "B", "C", "D", "E"] # to be expanded
+        possible_patterns = ["A", "B", "C"] # to be expanded
         poem_pattern = ""
         for i in range(0, self.num_sentences):
             pattern = random.choice(possible_patterns)
@@ -56,11 +69,21 @@ class Poem:
     def generate_to_string(self, word_list):
         example_str = " ".join(word_list)
         return example_str.capitalize()
+    
+    def update_pattern_dict(self, pattern_key, pattern_value):
+        if len(self.pattern_dict) == 0:
+            for i in range(0, len(self.pattern)):
+                self.pattern_dict[self.pattern[i]] = []
+        
+        self.pattern_dict[pattern_key].append(pattern_value)
+
 
 def test():
     test = Poem()
 
     # for sentence in test.sentences:
     #     print(test.generate_to_string(sentence))
+    for test in test.sentences:
+        print(test)
 
 test()
