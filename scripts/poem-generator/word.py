@@ -5,9 +5,9 @@ from spacy.cli import download
 import pronouncing
 
 class Word:
-    def __init__(self, word, is_stopword):
+    def __init__(self, word, tag):
         self.word = word
-        self.is_stopword = is_stopword
+        self.tag = tag
         self.num_syllables = 0
         self.syllable_stress = []
         self.count_syllables()
@@ -23,17 +23,17 @@ class Word:
         syllables = syllables[0]
         self.num_syllables = len(syllables)
 
-        pronounciation = pronouncing.phones_for_word(self.word)
-        stresses = pronouncing.stresses(pronounciation[0])
-        # 1 = stressed, 0 = unstressed
-        for i in range(0, len(syllables)):
-            syllable_list = [syllables[i], stresses[i]]
-            self.syllable_stress.append(syllable_list)
+        # pronunciation = pronouncing.phones_for_word(self.word)
+        # stresses = pronouncing.stresses(pronunciation[0])
+        # # 1 = stressed, 0 = unstressed
+        # for i in range(0, len(syllables)):
+        #     syllable_list = [syllables[i], stresses[i]]
+        #     self.syllable_stress.append(syllable_list)
 
-def test():
-    testword = Word("beautiful", False)
+# def test():
+#     testword = Word("beautiful", False)
 
-    print(testword.num_syllables)
-    print(testword.syllable_stress)
+#     print(testword.num_syllables)
+#     print(testword.syllable_stress)
 
-test()
+# test()
