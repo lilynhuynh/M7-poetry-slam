@@ -19,9 +19,12 @@ class Word:
         assert nlp.pipe_names == ["tok2vec", "tagger", "syllables", "parser",
                                   "attribute_ruler", "lemmatizer", "ner"]
         word = nlp(self.word)
-        syllables = [token._.syllables for token in word]
-        syllables = syllables[0]
-        self.num_syllables = len(syllables)
+        try:
+            syllables = [token._.syllables for token in word]
+            syllables = syllables[0]
+            self.num_syllables = len(syllables)
+        except:
+            self.num_syllables = 0
 
         # pronunciation = pronouncing.phones_for_word(self.word)
         # stresses = pronouncing.stresses(pronunciation[0])

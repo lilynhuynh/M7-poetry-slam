@@ -1,15 +1,18 @@
 import random
-from domain_link import Domain
-from sentence import Sentence
+# from domain_link import Domain
+# from sentence import Sentence
+from poem_generator.domain_link import Domain
+from poem_generator.sentence import Sentence
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from nltk.corpus import words
+import json
 
 class Poem:
-    POSSIBLE_TOPICS = "romance", ""
+    POSSIBLE_TOPICS = "think", "love", "change", "real"
 
     def __init__(self):
-        self.secret = "think"
+        self.secret = ""
         self.key_narrative_elems = []
         self.pattern = ""
         self.num_sentences = 0
@@ -39,7 +42,7 @@ class Poem:
 
     
     def generate_topic(self):
-        # self.secret = random.choice(self.POSSIBLE_TOPICS)
+        self.secret = random.choice(self.POSSIBLE_TOPICS)
         self.num_sentences = len(self.secret)
         # self.generate_narrative_elems(self.secret)
 
@@ -77,6 +80,17 @@ class Poem:
         
         self.pattern_dict[pattern_key].append(pattern_value)
 
+    def jsonify_sentences(self):
+        sentence_dict = {}
+        for i in range (0, self.num_sentences):
+            sentence_dict[i] = self.sentences[i]
+        return sentence_dict
+
+def generate_poem():
+    poem = Poem()
+    for sentence in poem.sentences:
+        print(sentence)
+    return Poem()
 
 def test():
     test = Poem()
@@ -86,4 +100,4 @@ def test():
     for test in test.sentences:
         print(test)
 
-test()
+# test()
