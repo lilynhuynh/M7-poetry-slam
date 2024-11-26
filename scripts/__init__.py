@@ -5,7 +5,6 @@ from flask_cors import CORS
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 CORS(app)
 
-print("TEMPLATE PATH!", app.static_folder)
 
 @app.route("/")
 def poem_website():

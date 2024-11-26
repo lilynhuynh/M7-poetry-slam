@@ -1,15 +1,14 @@
 import random
 # from domain_link import Domain
 # from sentence import Sentence
-from poem_generator.domain_link import Domain
+# from poem_generator.domain_link import Domain
 from poem_generator.sentence import Sentence
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from nltk.corpus import words
-import json
 
 class Poem:
-    POSSIBLE_TOPICS = "think", "love", "change", "real"
+    POSSIBLE_TOPICS = "love", "time"
 
     def __init__(self):
         self.secret = ""
@@ -34,6 +33,7 @@ class Poem:
                 print("matching pattern!", random_rhyme)
                 sent = Sentence(self.pattern[i], self.secret[i], self.secret, random.choice(random_rhyme))
             sent.generate_sentence()
+            sent.clean_sentence()
             
             self.sentences.append(str(sent))
             # print(sent)
@@ -87,17 +87,19 @@ class Poem:
         return sentence_dict
 
 def generate_poem():
-    poem = Poem()
-    for sentence in poem.sentences:
-        print(sentence)
     return Poem()
 
-def test():
-    test = Poem()
+# def test():
+#     test = Poem()
 
-    # for sentence in test.sentences:
-    #     print(test.generate_to_string(sentence))
-    for test in test.sentences:
-        print(test)
+#     # for sentence in test.sentences:
+#     #     print(test.generate_to_string(sentence))
+#     print(test.pattern)
+#     for sentence in test.sentences:
+#         print(f"{sentence}")
+
+#     print("rhyme dictionary")
+#     for pattern in test.pattern_dict:
+#         print(f"{pattern}: {test.pattern_dict[pattern]}")
 
 # test()

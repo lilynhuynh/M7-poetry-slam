@@ -5,9 +5,8 @@ import random
 from poem_generator.word import Word
 from nltk.corpus import brown
 import pronouncing
-from collections import Counter
 from nltk import ngrams
-import string
+from collections import deque
 # import ssl
 # try:
 #     _create_unverified_https_context = ssl._create_unverified_context
@@ -19,7 +18,8 @@ import string
 # nltk.download('brown')
 
 class Sentence:
-    POPULATION = 10
+    MAX_SENTENCE_GRID = 10
+    
     SENTENCE_STRUCTS = ["Simple", "Compound", "Complex", "Compound-Complex"]
     IND_CLAUSE_STRUCTS = {
         # PPS and AT best for first
@@ -40,32 +40,257 @@ class Sentence:
     }
     # to add more later
 
+
+    MAX_SYLLABLES = 10
+
     def __init__(self, pattern_key, secret_letter, theme, rhyme):
-        self.word_list = []
+        self.word_list = self.generate_empty_word_list()
         self.pattern_key = pattern_key
         self.secret_letter = secret_letter
         self.theme = theme
-        self.relevant_words = brown.tagged_words(tagset='brown')
+        self.relevant_words = [word.lower() for word in brown.words() if word.isalpha()]
         self.rhyme = rhyme
+        self.possible_words = deque()
+        self.syllable_count = 0
+        self.used_words_dict = dict()
 
         # self.sentence_struct = random.choice(self.SENTENCE_STRUCTS)
         self.sentence_struct = "Simple"
 
-    def generate_relevant_words(self):
-        brown_word_list = brown.tagged_words(tagset='brown')
+    """
+    TODO: Use sudoku solver backtracking method to figure out sentence generation
+    - solve method - loops through grid, this case 1D array for sentence
+        - for loop, if cur space is 0 (empty), create new word obj that calls next move function
+        - if next word invalid, call backtrack, peek deque for move index
+        - if next word valid, get word obj value, update word list with new word, push word to deque
+    - next move method - checks if word is valid, returns null if not valid, if not valid, call backtrack
+        - checks if valid using valid answer method
+    - valid answer method -
+        - checks if context of word in word list is valid, returns boolean
+    - bactrack method - pop the recent word from deque, try a new word from deque, insert into word list
+        - if new word also null, call bactrack again
+        - if valid, push new move into deque, update word list with new word
 
-        updated_brown_alpha = {}
-        for word, tag in brown_word_list:
-            # if word not in updated_brown_alpha and word.isalpha():
-            if word not in updated_brown_alpha:
-                updated_brown_alpha[word] = tag
+    """
+    def generate_empty_word_list(self):
+        word_list = []
+        for i in range(0, self.MAX_SENTENCE_GRID):
+            word_list.append("")
+        return word_list
 
-        unique_brown_list = [(word, tag) for word, tag in updated_brown_alpha.items()]
 
-        return unique_brown_list
+    def check_valid_word(self, word, syllables, index):
+        # Check if it is first word, does it match the secret letter
+        if index == 0:
+            first_letter = word[0]
+            if first_letter == self.secret_letter:
+                print("valid first word:", word)
+                return True
+            else:
+                return False
+
+        else:
+        # Since we are parsing through related ngrams, we know it is in context
+
+            # Check if current syllable count + new word does not extend pass MAX_SYLLABLES
+            cur_syllable_coount = self.syllable_count
+            new_syllables_count = cur_syllable_coount + syllables
+            if new_syllables_count < self.MAX_SYLLABLES:
+                print("valid word:", word)
+                return True
+            elif new_syllables_count == self.MAX_SYLLABLES:
+                # Check if it is last word, does it rhyme
+                print("is last word")
+                if self.rhyme != "":
+                    rhymes = pronouncing.rhymes(self.rhyme)
+                    if word not in rhymes:
+                        return False
+                else:
+                    print("no rhyme recorded")
+                    return True
+            else:
+                print("max syllables exceeded")
+                return False
+            
+
+    def get_next_word(self, index):
+        # Check if it finds word list context
+        # Generate list of ngram words based on current word and trigram word list
+        ngrams = []
+        if index == 0: # First word, check if first given word is valid
+            ngrams = [word for word in self.relevant_words if word[0] == self.secret_letter]
+        elif index <= 2:
+            clause = self.word_list[:3]
+            print(clause)
+            ngrams = self.find_n_gram_words(clause)
+        else:
+            clause = self.word_list[index-3:index]
+            print(clause)
+            ngrams = self.find_n_gram_words(clause)
+        # print("ngrams:", ngrams)
+
+        ngram_len = len(ngrams)
+        i = 0
+        while i < ngram_len:
+            ngram = random.choice(ngrams)
+            new_word = Word(ngram, index)
+            if new_word.num_syllables != 0:
+                if self.check_valid_word(new_word.word, new_word.num_syllables, index) == True:
+                # Check if able to count syllables
+                    return new_word
+            i += 1
+        return None
+
+
+    def find_n_gram_words(self, word_list):
+        clean_words = [word.lower() for word in word_list if word != ""]
+
+        # Get current len of word list, remove blanks
+        n = len(clean_words)
+
+        ngram_words = list(ngrams(self.relevant_words, n+1))
+        clean_ngrams = []
+        for ngram in ngram_words:
+            clean = []
+            for word in ngram:
+                clean.append(word.lower())
+            clean_ngrams.append(clean)
+        # clean_ngrams = [tuple(word.lower(), tag) for word, tag in ngrams]
+        # print(clean_ngrams[:10])
+        next_words = []
+        for ngram in clean_ngrams:
+            if ngram[:n] == clean_words:
+                all_alnum = True
+                for word in ngram:
+                    if word.isalnum() == False:
+                        all_alnum = False
+                if all_alnum == True:
+                    if ngram[-1] not in next_words:
+                        next_words.append(ngram[-1])
+
+        return list(next_words)
+
+
+    def backtrack(self):
+        print("IN BACKTRACKING")
+        print("current word list while in backtracking:", self.word_list)
+        print("current syllable count while backtracking:", self.syllable_count)
+
+        # Base case, if no more possible words left
+        if not self.possible_words:
+            print("Base case, reached the beginning, no more possible moves")
+            self.syllable_count = 0
+            self.word_list = self.generate_empty_word_list()
+            return
+        
+        print("Checking the deque in backtracking")
+        for move in self.possible_words:
+            print(move)
+
+        recent_word = self.possible_words.popleft() # get recent move
+        i = recent_word.index
+        word = recent_word.word
+        syllables = recent_word.num_syllables
+        print("Recent Move:", word, i, syllables)
+
+        self.word_list[i] = ""
+        self.syllable_count -= syllables
+
+        self.update_used_words(i, word)
+
+        try_word = self.get_next_word(i)
+        print("dict:", self.used_words_dict[i])
+
+        if try_word is not None:
+
+            if try_word.word not in self.used_words_dict[i]:
+            # Check if word has already been used, don't decrement if already used
+                print("New valid word", try_word.word, "in backtracking at index", i)
+                self.possible_words.appendleft(try_word)
+                self.word_list[i] = word
+                    # self.syllable_count = self.syllable_count + try_word.num_syllables
+                    # self.update_used_words(i, try_word.word)
+                    # print("updated word list, finished backtracking:", self.word_list)
+                    # print("returned index for new try_word:", try_word.index)
+                    # print("new syllable count after backtrack:", self.syllable_count)
+                return
+
+        self.backtrack()
 
 
     def generate_sentence(self):
+        i = 0
+        stop = 0
+        while i < self.MAX_SENTENCE_GRID:
+            if stop == 50:
+                print("stuck in while loop, break")
+                break
+            print("cur sentence:",self.word_list)
+            print("cur syllables:", self.syllable_count)
+            print("cur index:", i)
+            # Check if already reached max syllable count
+            if self.syllable_count == self.MAX_SYLLABLES:
+                break
+            
+            if self.word_list[i] == "":
+                # random_word = random.choice(self.relevant_words).lower()
+                # print(random_word)
+                word = self.get_next_word(i)
+                was_backtracking = False
+                if word is None:
+                    self.backtrack()
+                    print("finished back tracking")
+                    word = self.possible_words[0] # peek
+                    print("previous word sentence index", i)
+                    i = word.index # update index
+                    print("peeked at new word:", word.word, i)
+                    was_backtracking = True
+
+                new_word = word
+                print("new word at index:", new_word.word, new_word.index, new_word.num_syllables)
+                self.update_used_words(i, new_word.word)
+                self.word_list[i] = new_word.word
+                print("previous syllables count:", self.syllable_count)
+                self.syllable_count += new_word.num_syllables
+                print("updated syllables count:", self.syllable_count)
+                if was_backtracking is False:
+                    self.possible_words.appendleft(new_word)
+                i += 1
+            stop += 1
+
+
+    def update_used_words(self, index, word):
+        if index not in self.used_words_dict:
+            print("added index", index)
+            self.used_words_dict[index] = set()
+        # else:
+        #     print("added word in for index", word, index)
+        #     self.used_words_dict[index].append(word)
+        self.used_words_dict[index].add(word)
+
+
+
+    def clean_sentence(self):
+        cleaned_sentence = []
+        for word in self.word_list:
+            if word != "":
+                cleaned_sentence.append(word)
+        self.word_list = cleaned_sentence
+
+
+    def create_relevant_words(self):
+        words = brown.words()
+        valid_english_words = set(
+                word.lower() for word in words
+                if word.isalpha() and
+                (len(word) > 1 or word.lower() in {"a", "i"})
+            )
+        
+
+        return valid_english_words
+
+
+    def generate_sentence2(self):
         nlp = spacy.load("en_core_web_sm")
         # relevant_category_words = brown.tagged_words()
 
@@ -290,7 +515,7 @@ class Sentence:
                     print("no relevant words")
                     clause_index -= 1
 
-                    if len(clause_index) == 0:
+                    if len(clause) == 0:
                         # remove current first from possible first and from clause array
                         to_remove = clause[clause_index]
                         possible_firsts = [tuple for tuple in possible_firsts if tuple[1] != to_remove]
@@ -672,7 +897,6 @@ class Sentence:
         return next_words
 
     def generate_independent_clause4(self, relevant_words, is_first):
-        generated = []
         # Check if it contains first letter of sentence
         struct_list = [1, 2, 3, 4, 5, 6, 7, 8]
         clause_choice = random.choice(struct_list)
@@ -684,39 +908,60 @@ class Sentence:
         possible_firsts = []
         # generate all possible first words in sentence
         end_sentence = False
+        given_relevant_words = relevant_words
         # relevant_word_pairs = set()
+
+        # SYLLABLES COUNTER
+        MAX_SYLLABLES = 10
+        syllables_count = 0
+
         while end_sentence == False: # change this
             print("current clause", clause)
             print("possible firsts:", len(possible_firsts))
             if is_first:
                 set_empty = False
                 while set_empty == False:
-                    for tag_word in relevant_words:
-                        word = tag_word[0].lower()
+                    for word in relevant_words:
+                        word = word.lower()
                         if word[0] == self.secret_letter:
                         # if word.isalpha() or word.isalnum():
-                            if tag_word[1] == clause_struct[clause_index]:
-                                possible_firsts.append(word)
+                            possible_firsts.append(word)
                     if len(possible_firsts) != 0:
                         set_empty = True
                     else:
                         struct_list.remove(clause_choice)
                         clause_choice = random.choice(struct_list)
                         clause_struct = self.IND_CLAUSE_STRUCTS[clause_choice]
-                clause.append(random.choice(list(possible_firsts)))
+                
+                while syllables_count == 0:
+                    add_first = random.choice(list(possible_firsts))
+                    first_word = self.define_new_word(add_first)
+                    if first_word.num_syllables != 0:
+                        syllables_count += first_word.num_syllables
+                        clause.append(add_first)
+                        break
+
                 clause_index += 1
                 is_first = False
             # generated list of possible first words
             clean_possible_first = set(possible_firsts)
             possible_firsts = list(clean_possible_first)
-            while len(possible_firsts) != 0:
+            while syllables_count <= MAX_SYLLABLES or len(possible_firsts) != 0:
                 print("clause", clause)
-                relevant_ngram_words = self.find_n_gram_words(clause, self.relevant_words)
+                print("syllables count:", syllables_count)
+
+                if clause_index <= 3:
+                    print(f"looking at clause from [0:{clause_index}] - {clause}")
+                    relevant_ngram_words = self.find_n_gram_words(clause, self.relevant_words)
+                else:
+                    print(f"looking at clause from [{clause_index-3}:{len(clause)+1}] - {clause[clause_index-3:]}")
+                    relevant_ngram_words = self.find_n_gram_words(clause[clause_index-3:], self.relevant_words)
+
                 # if relevant n grams empty, go back 1 or if first again, change first
                 if len(relevant_ngram_words) == 0:
                     print("no relevant words")
                     clause_index -= 1
-                    if len(clause_index) == 0:
+                    if len(clause) == 0:
                         # remove current first from possible first and from clause array
                         possible_firsts.remove(clause[clause_index])
                         print("no available after first, removed",clause[clause_index], len(possible_firsts))
@@ -743,15 +988,47 @@ class Sentence:
                 print("List of relevant words available!")
                 print("relevant ngrams", len(relevant_ngram_words))
                 # choose random word from list of ngrams
-                random_next_word = random.choice(relevant_ngram_words)
-                prev_relevant_ngram_words = relevant_ngram_words
-                print("NEW WORD:", random_next_word)
-                if random_next_word in string.punctuation:
-                    print("found punctuation", random_next_word)
+                is_valid_word = False
+                while is_valid_word == False:
+                    print("in valid words check, relevant ngrams", len(relevant_ngram_words))
+                    if syllables_count > 7 and self.rhyme != "": #last word
+                        print("Found last word")
+                        rhymes = pronouncing.rhymes(self.rhyme)
+                        rand_rhyme = random.choice(rhymes)
+                        print("NEW WORD:", rand_rhyme)
+                        # syllables_count += new_word.num_syllables
+                        syllables_count = MAX_SYLLABLES
+                        clause.append(rand_rhyme)
+                        clause_index += 1
+                        is_valid_word = True
+                        break
+
+                    if len(relevant_ngram_words) == 0:
+                        is_valid_word = True
+                        break
+                    random_next_word = random.choice(relevant_ngram_words)
+                    new_word = self.define_new_word(random_next_word)
+
+                    # Check if valid word less than syllable count
+                    new_word_syllables = new_word.num_syllables
+
+                    if syllables_count > 7 and self.rhyme == "":
+                        new_word_syllables = 1 # defaulting some rand number just to pass as last word, change later
+
+                    if new_word_syllables != 0:
+                        print("NEW WORD:", random_next_word)
+                        syllables_count += new_word.num_syllables
+                        clause.append(random_next_word)
+                        clause_index += 1
+                        is_valid_word = True
+                        prev_relevant_ngram_words = relevant_ngram_words
+                    else:
+                        print("unable to count syllables of", random_next_word)
+                        relevant_ngram_words.remove(random_next_word)
+                
+                if syllables_count >= MAX_SYLLABLES:
                     end_sentence = True
                     break
-                else:
-                    clause.append(random_next_word)
                 
         #     struct_tag_words = set()
         #     while set_empty == False:
@@ -807,12 +1084,11 @@ class Sentence:
         return clause
 
     
-    def find_n_gram_words(self, list_of_words, relevant_words):
-        clean_words = [word.lower() for word in list_of_words]
+    def find_n_gram_words3(self, word, word_list):
+        clean_words = [word.lower() for word in word_list]
         # print(clean_words)
-        rel_words = [word for word, tag in relevant_words]
-        n = len(list_of_words)
-        ngrams = list(nltk.ngrams(rel_words, n+1))
+        n = len(word_list)
+        ngrams = list(nltk.ngrams(self.relevant_words, n+1))
         clean_ngrams = []
         for ngram in ngrams:
             clean = []
@@ -821,7 +1097,7 @@ class Sentence:
             clean_ngrams.append(tuple(clean))
         # clean_ngrams = [tuple(word.lower(), tag) for word, tag in ngrams]
         # print(clean_ngrams[:10])
-        next_words = [ngram[-1] for ngram in clean_ngrams if list(ngram[:-1]) == clean_words]
+        next_words = [ngram[-1] for ngram in clean_ngrams if list(ngram[:-1]) == clean_words and list(ngram[:-1].isalnum())]
         return next_words
 
 
@@ -835,6 +1111,12 @@ class Sentence:
         # return(tag_anteceders)
 
 
+    def define_new_word(self, word):
+        new_word = Word(word, "")
+        new_word.count_syllables()
+
+        return new_word
+    
 
     def __str__(self):
         print("CrEATING SENTENCE")
@@ -848,8 +1130,8 @@ class Sentence:
     
 
 
-def test():
-    test = Sentence("ABA", "r", "romance", "time")
+# def test():
+    # test = Sentence("ABA", "r", "romance", "time")
     
     # print(test.find_word_pairs(("feels", "VBZ"),"CC"))
     # print(test.relevant_words)
@@ -858,17 +1140,16 @@ def test():
     # for tag_words in test.relevant_words:
     #     if tag_words[1] == "JJ"
 
-    trigrams = test.find_word_trigrams(["the","dog"], test.relevant_words)
-    print(trigrams)
+    # trigrams = test.find_word_trigrams(["the","dog"], test.relevant_words)
+    # print(trigrams)
 
-    bigrams = test.find_word_bigrams("dog", test.relevant_words)
-    print(bigrams)
+    # bigrams = test.find_word_bigrams("dog", test.relevant_words)
+    # print(bigrams)
 
     # words = test.find_n_gram_words(["the", "great"], test.relevant_words)
     # print(words)
     # for word in words:
     #     print(word)
-
 
 # test()
 

@@ -5,12 +5,12 @@ from spacy.cli import download
 import pronouncing
 
 class Word:
-    def __init__(self, word, tag):
+    def __init__(self, word, index):
         self.word = word
-        self.tag = tag
         self.num_syllables = 0
-        self.syllable_stress = []
-        # self.count_syllables()
+        self.index = index
+        # self.syllable_stress = []
+        self.count_syllables()
 
     def count_syllables(self):
         # download("en_core_web_sm")
@@ -32,6 +32,9 @@ class Word:
         # for i in range(0, len(syllables)):
         #     syllable_list = [syllables[i], stresses[i]]
         #     self.syllable_stress.append(syllable_list)
+
+    def get_word_index(self):
+        return self.index
 
     def __str__(self):
         return f"{self.word}"
