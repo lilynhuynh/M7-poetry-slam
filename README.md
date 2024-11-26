@@ -99,3 +99,10 @@ I want to acknowledge that some of the features, especially the JavaScript featu
 |**Ngrams Generation** | Robert P. Levy (2001) | Used to base ideas of rhymes, and future implementation of syllable stresses and fitness function | `word.py` and `poem.py`<br>https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=85edc0fad667e898f219a7f0b74d74976040178e |
 | **Acrostic Poem** | Rajat Agarwal, Katharina Kann (2020) | Used to base ideas on using a secret word to generate the first letter of each sentence and theme | `sentence.py` and `poem.py`<br>https://arxiv.org/pdf/2010.02239 |
 | **Narrative Elements** | Yongkang Wong, Shaojing Fan, Yangyang Guo, Ziwei Xu, Karen Stephen, Rishabh Sheoran, Anusha Bhamidipati, Vivek Barsopia, Jianquan Liu, Mohan Kankanhalli (2022) | (Not implemented yet) Used to generate key narrative elements to create thematic poems, to future implement using web scraping | `poem.py`<br>https://dl.acm.org/doi/abs/10.1145/3503161.3549202 |
+
+## Closing Statement
+Last of all, I would like to close this README with a poem my partner wrote about this project's initiative overall - which summed up my whole experience trying to build a "computationally creative system that generates poetry".
+
+![Poetry Screenshot](assets/poem_screenshot.png)
+
+Feel free to download the [pdf](assets/Computers%20Cannot%20Write%20Poetry.pdf) version for viewing
