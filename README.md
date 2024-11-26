@@ -48,7 +48,7 @@ https://github.com/lilynhuynh/M7-poetry-slam
 
 ## Setup
 > [!NOTE]
-> Please install **flask, flask_cors nltk, spacy, pronouncing, collections** and **collections** prior to running the program. The poem generation will not work properly if not installed beforehand. If you have any issues with accessing certain downloads within packages like brown within NLTK, even after running `nltk.download('<resource>')`. Please implement this at the top of the python file it is erroring out on to download the file:
+> Please install **flask, flask_cors, nltk, spacy, pronouncing, collections** and **collections** prior to running the program. The poem generation will not work properly if not installed beforehand. If you have any issues with accessing certain downloads within packages like brown within NLTK, even after running `nltk.download('<resource>')`. Please implement this at the top of the python file it is erroring out on to download the file:
 ```
 import ssl
 try:
@@ -87,8 +87,7 @@ The current program also does not have a feature to rate and save poem being gen
 Last of all, the main limitation of this program is its long poem generation time. The goal is to cache and quicken the poem generation process so that it is more efficient in the future.
 
 ## Additional Resources
-For this project, I presented the system to our class and linked below are the materials used for this presentation.
-- [Slides](https://docs.google.com/presentation/d/1kPE7Zcxg92tjISDB9xe3qwr_K5PMWaIqNHvijLPey2Q/edit?usp=drive_link)
+For this project, I presented the system to our class and linked below are the materials used for this [presentation](https://docs.google.com/presentation/d/1kPE7Zcxg92tjISDB9xe3qwr_K5PMWaIqNHvijLPey2Q/edit?usp=drive_link).
 
 ## Acknowledgements
 I want to acknowledge that some of the features, especially the JavaScript features for `mousehover-effect.js` and `text-to-screen-and-speech.js`. Furthermore, lots of the features/base ideals for the poem generation were from scholarly articles. These acknowledgements will be detailed below.
@@ -96,8 +95,7 @@ I want to acknowledge that some of the features, especially the JavaScript featu
 | Feature | Author | Description | File & Source Link |
 | :--- | :----- | :--------- | :----- |
 | **Mousehover Effect** | Online Tutorials (2023) | Used this source code to build the cursor-letter effect on the front-end. | `static/mousehover-effect.js`<br>https://www.youtube.com/watch?v=tsLaU1evEPQ&t=629s |
-| **Typewriter Effect** | Geoff Graham (2022) | Used this source code to build the typewriter effect for each line after the poem data is received. | `static/text-to-screen-and-speech.js`<br>https://css-tricks.com/snippets/css/typewriter-effect/
-|
+| **Typewriter Effect** | Geoff Graham (2022) | Used this source code to build the typewriter effect for each line after the poem data is received. | `static/text-to-screen-and-speech.js`<br>https://css-tricks.com/snippets/css/typewriter-effect/ |
 |**Ngrams Generation** | Robert P. Levy (2001) | Used to base ideas of rhymes, and future implementation of syllable stresses and fitness function | `word.py` and `poem.py`<br>https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=85edc0fad667e898f219a7f0b74d74976040178e |
 | **Acrostic Poem** | Rajat Agarwal, Katharina Kann (2020) | Used to base ideas on using a secret word to generate the first letter of each sentence and theme | `sentence.py` and `poem.py`<br>https://arxiv.org/pdf/2010.02239 |
 | **Narrative Elements** | Yongkang Wong, Shaojing Fan, Yangyang Guo, Ziwei Xu, Karen Stephen, Rishabh Sheoran, Anusha Bhamidipati, Vivek Barsopia, Jianquan Liu, Mohan Kankanhalli (2022) | (Not implemented yet) Used to generate key narrative elements to create thematic poems, to future implement using web scraping | `poem.py`<br>https://dl.acm.org/doi/abs/10.1145/3503161.3549202 |
