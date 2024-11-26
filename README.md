@@ -91,4 +91,13 @@ For this project, I presented the system to our class and linked below are the m
 - [Slides](https://docs.google.com/presentation/d/1kPE7Zcxg92tjISDB9xe3qwr_K5PMWaIqNHvijLPey2Q/edit?usp=drive_link)
 
 ## Acknowledgements
-We want to acknowledge that our recipe generator is based off of **_PIERRE_** ([Morris et al., 2012](http://computationalcreativity.net/iccc2012/wp-content/uploads/2012/05/119-Morris.pdf)). Furthermore, we want to acknowledge the usage of creative metrics from **SPECS** ([Jordanous, 2012](https://sussex.figshare.com/articles/thesis/Evaluating_computational_creativity_a_standardised_procedure_for_evaluating_creative_systems_and_its_application/23395574?file=41122427)) and creative perspectives from **PPPPerspectives**([Jordanous, 2016](https://www.tandfonline.com/doi/full/10.1080/09540091.2016.1151860)).
+I want to acknowledge that some of the features, especially the JavaScript features for `mousehover-effect.js` and `text-to-screen-and-speech.js`. Furthermore, lots of the features/base ideals for the poem generation were from scholarly articles. These acknowledgements will be detailed below.
+
+| Feature | Author | Description | File & Source Link |
+| :--- | :----- | :--------- | :----- |
+| **Mousehover Effect** | Online Tutorials (2023) | Used this source code to build the cursor-letter effect on the front-end. | `static/mousehover-effect.js`<br>https://www.youtube.com/watch?v=tsLaU1evEPQ&t=629s |
+| **Typewriter Effect** | Geoff Graham (2022) | Used this source code to build the typewriter effect for each line after the poem data is received. | `static/text-to-screen-and-speech.js`<br>https://css-tricks.com/snippets/css/typewriter-effect/
+|
+|**Ngrams Generation** | Robert P. Levy (2001) | Used to base ideas of rhymes, and future implementation of syllable stresses and fitness function | `word.py` and `poem.py`<br>https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=85edc0fad667e898f219a7f0b74d74976040178e |
+| **Acrostic Poem** | Rajat Agarwal, Katharina Kann (2020) | Used to base ideas on using a secret word to generate the first letter of each sentence and theme | `sentence.py` and `poem.py`<br>https://arxiv.org/pdf/2010.02239 |
+| **Narrative Elements** | Yongkang Wong, Shaojing Fan, Yangyang Guo, Ziwei Xu, Karen Stephen, Rishabh Sheoran, Anusha Bhamidipati, Vivek Barsopia, Jianquan Liu, Mohan Kankanhalli (2022) | (Not implemented yet) Used to generate key narrative elements to create thematic poems, to future implement using web scraping | `poem.py`<br>https://dl.acm.org/doi/abs/10.1145/3503161.3549202 |
