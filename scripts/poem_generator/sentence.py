@@ -61,6 +61,7 @@ class Sentence:
         if index == 0:
             first_letter = word[0]
             if first_letter == self.secret_letter:
+                print("Found valid FIRST word")
                 return True
             else:
                 return False
@@ -71,6 +72,7 @@ class Sentence:
 
             # If not first word, is it less than MAX_SYLLABLES
             if new_syllables_count < self.MAX_SYLLABLES:
+                print("Found valid word less than MAX syllables")
                 return True
             elif new_syllables_count == self.MAX_SYLLABLES:
                 
@@ -79,7 +81,11 @@ class Sentence:
                     rhymes = pronouncing.rhymes(self.rhyme)
                     if word not in rhymes:
                         return False
+                    else:
+                        print("Found valid LAST word that rhymes")
+                        return True
                 else:
+                    print("Found valid last word")
                     return True
             else:
                 return False
@@ -91,6 +97,7 @@ class Sentence:
         it returns the new word object, else it returns None.
         """
         # Generates the ngram releted next words
+        print("Getting next word in sentence")
         ngrams = []
         if index == 0: # If first word
             ngrams = [word for word in self.relevant_words
@@ -106,6 +113,7 @@ class Sentence:
 
         ngram_len = len(ngrams)
         i = 0
+        print(f"Found {ngram_len} related next words!")
         
         # While ngram next words available, check if valid
         while i < ngram_len:

@@ -35,7 +35,6 @@ var typewriterGenerated = false; // Boolean for recitePoem() is called once
 if ('speechSynthesis' in window) {
     speechSynthesis.onvoiceschanged = () => {
         voices = window.speechSynthesis.getVoices();
-        console.log("Voices loaded:", voices);
     };
 }
 

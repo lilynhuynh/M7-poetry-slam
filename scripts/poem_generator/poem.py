@@ -29,7 +29,7 @@ class Poem:
     Poem represents the list of sentences, rhyme pattern scheme, random
     secret word chosen to create the acrostic poem, and more.
     """
-    POSSIBLE_TOPICS = "love", "time", "poem", "real", "try", "create"
+    POSSIBLE_TOPICS = "love", "time"
 
     def __init__(self):
         self.secret = ""
@@ -44,7 +44,7 @@ class Poem:
         print(f"Number of sentences to be generated: {self.num_sentences}")
         print(f"Generated pattern: {self.pattern}")
 
-        for i in range(0, len(self.num_sentences)):
+        for i in range(0, self.num_sentences):
             gen_sentence = ""
             
             # If first sentence in list or first rhyme pattern seen

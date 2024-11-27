@@ -15,6 +15,8 @@ Bugs:
 """
 
 import spacy
+from spacy_syllables import SpacySyllables
+from spacy.cli import download
 
 class Word:
     """
