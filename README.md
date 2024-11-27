@@ -1,4 +1,4 @@
-# POETRY SLAM
+# THE JABBERWOCK
 
 ## Overview
 **_CSCI 3725 Computational Creativity_: M7 - Poetry Slam**
@@ -9,7 +9,7 @@
 
 <img src="https://preview.redd.it/dop0lrdzao651.png?auto=webp&s=96a60e9916c8814d7eb8788f59c7f1fd0eef29d9" width=100%>
 
-This project was developed in **CSCI 3725 Computational Creativity** to create, in our terms, creative poems from our computational system. This project challenged my ideas of what I consider a "poem", what are my restrictions to poem creation, how involved can a "human" be for the system to be still computationally creative during generation, etc.
+This project was developed in **CSCI 3725 Computational Creativity** to create, in our terms, creative poems from our computational system. This project challenged my ideas of what I consider a "poem", what are my restrictions to poem creation, how involved can a "human" be for the system to be still computationally creative during generation, etc. Thus, detailed here is my current poetry generation system, **the Jabberwock**.
 
 Within my process, I set myself a couple of goals in terms of what my ideal poem to be generated should be:
 1. Follows a **Acrostic Poem** format, where the first letter of each word corresponds to the secret letter of the secret word.
