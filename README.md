@@ -7,6 +7,8 @@
 
 **Last Updated**: November 26, 2024
 
+<img src="https://preview.redd.it/dop0lrdzao651.png?auto=webp&s=96a60e9916c8814d7eb8788f59c7f1fd0eef29d9" width=100%>
+
 This project was developed in **CSCI 3725 Computational Creativity** to create, in our terms, creative poems from our computational system. This project challenged my ideas of what I consider a "poem", what are my restrictions to poem creation, how involved can a "human" be for the system to be still computationally creative during generation, etc.
 
 Within my process, I set myself a couple of goals in terms of what my ideal poem to be generated should be:
@@ -17,10 +19,6 @@ Within my process, I set myself a couple of goals in terms of what my ideal poem
 I, originally, had other goals I wanted to reach as well, but due to time constraints and difficulties implementing, I was not able to reach these goals. These goals being:
 - Each line within the poem must be EXACTLY **10 syllables**
 - The overall poem **theme** must be related to the secret word given
-
-
-<img src="https://preview.redd.it/dop0lrdzao651.png?auto=webp&s=96a60e9916c8814d7eb8788f59c7f1fd0eef29d9" width=100%>
-
 
 ### Generation Process
 My poem generation process uses backtracking techniques, NLTK's (Natural Language Toolkit) brown corpus words and ngrams, pronouncing's rhymes, and spacy's syllables counter. While these parts were implemented, some of these generation processes have limitations/bugs that I will later address.
@@ -65,6 +63,9 @@ To run the code, please open the `__init__.py` file within the `scripts` folder 
 
 The terminal should then open a Flask app in debug mode. It should give you a url to open the `index.html` on. For example, the line should look like `Running on http://127.0.0.1:5000` after the `Debug mode: on` line. Copy and paste the http link given and it should open up the front-end on your browser!
 
+> [!NOTE]
+> If you would like to locally test ONLY the poem generation within your terminal without having to bootup the Flask app, please do the following steps. (1) Comment out `from poem_generator.sentence import Sentence` in `poem.py` and replace with `from sentence import Sentence`. (2) Comment out `from poem_generator.word import Word` in `sentence.py` and replace with `from word import Word`. (3) Go to `poem.py` and uncomment `local_test()` at the button of the file. If you do want go back to using Flask after playing around locally, remember to revert these before running the Flask app again!
+
 ## Usage
 This program can be accessed by cloning the repository from the provided GitHub link above and running the `__init__.py` within the `scripts` folder.
 > [!CAUTION]
@@ -96,9 +97,10 @@ I want to acknowledge that some of the features, especially the JavaScript featu
 | :--- | :----- | :--------- | :----- |
 | **Mousehover Effect** | Online Tutorials (2023) | Used this source code to build the cursor-letter effect on the front-end. | `static/mousehover-effect.js`<br>https://www.youtube.com/watch?v=tsLaU1evEPQ&t=629s |
 | **Typewriter Effect** | Geoff Graham (2022) | Used this source code to build the typewriter effect for each line after the poem data is received. | `static/text-to-screen-and-speech.js`<br>https://css-tricks.com/snippets/css/typewriter-effect/ |
-|**Ngrams Generation** | Robert P. Levy (2001) | Used to base ideas of rhymes, and future implementation of syllable stresses and fitness function | `word.py` and `poem.py`<br>https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=85edc0fad667e898f219a7f0b74d74976040178e |
-| **Acrostic Poem** | Rajat Agarwal, Katharina Kann (2020) | Used to base ideas on using a secret word to generate the first letter of each sentence and theme | `sentence.py` and `poem.py`<br>https://arxiv.org/pdf/2010.02239 |
-| **Narrative Elements** | Yongkang Wong, Shaojing Fan, Yangyang Guo, Ziwei Xu, Karen Stephen, Rishabh Sheoran, Anusha Bhamidipati, Vivek Barsopia, Jianquan Liu, Mohan Kankanhalli (2022) | (Not implemented yet) Used to generate key narrative elements to create thematic poems, to future implement using web scraping | `poem.py`<br>https://dl.acm.org/doi/abs/10.1145/3503161.3549202 |
+|**Ngrams Generation** | Robert P. Levy (2001) | Used to base ideas of rhymes, and future implementation of syllable stresses and fitness function | `scripts/word.py` and `scripts/poem.py`<br>https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=85edc0fad667e898f219a7f0b74d74976040178e |
+| **Acrostic Poem** | Rajat Agarwal, Katharina Kann (2020) | Used to base ideas on using a secret word to generate the first letter of each sentence and theme | `scripts/sentence.py` and `scripts/poem.py`<br>https://arxiv.org/pdf/2010.02239 |
+| **Narrative Elements** | Yongkang Wong, Shaojing Fan, Yangyang Guo, Ziwei Xu, Karen Stephen, Rishabh Sheoran, Anusha Bhamidipati, Vivek Barsopia, Jianquan Liu, Mohan Kankanhalli (2022) | (Not implemented yet) Used to generate key narrative elements to create thematic poems, to future implement using web scraping | `scripts/poem.py`<br>https://dl.acm.org/doi/abs/10.1145/3503161.3549202 |
+| **Generate Button** | Josh W Comeau | Used this source code for the button animation implementation | `static/style.css`<br>https://getcssscan.com/css-buttons-examples |
 
 ## Closing Statement
 Last of all, I would like to close this README with a poem my partner wrote about this project's initiative overall - which summed up my whole experience trying to build a "computationally creative system that generates poetry".

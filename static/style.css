@@ -1,3 +1,17 @@
+/*
+CSCI 3725 Computational Creativity
+M7 Poetry Slam
+
+This is the styling file used by index.html which includes placement, colors,
+fonts, etc.
+
+Authors: Lily Huynh
+Last Updated: November 26, 2024
+
+Bugs:
+- No known bugs at the moment
+*/
+
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&family=Lexend+Deca:wght@100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&family=Indie+Flower&family=Lexend+Deca:wght@100..900&display=swap");
 

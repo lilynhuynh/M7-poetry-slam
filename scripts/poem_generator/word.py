@@ -1,19 +1,34 @@
-import spacy
-from spacy_syllables import SpacySyllables
-from spacy.cli import download
+"""
+CSCI 3725 Computational Creativity
+M7 Poetry Slam
 
-import pronouncing
+This file consists of the Word class where it takes the given word value
+and index of the word within the word list. Whenever a Word is initialized,
+it also calls for its count_syllables() function to use spacy to count the
+number syllables of the initialized word.
+
+Authors: Lily Huynh
+Last Updated: November 26, 2024
+
+Bugs:
+- No known bugs at the moment
+"""
+
+import spacy
 
 class Word:
+    """
+    Word represents the word object when called upon. Word needs a word value
+    and index within word list to be defined.
+    """
     def __init__(self, word, index):
         self.word = word
-        self.num_syllables = 0
+        self.num_syllables = self.count_syllables()
         self.index = index
-        # self.syllable_stress = []
-        self.count_syllables()
 
     def count_syllables(self):
-        # download("en_core_web_sm")
+        """Uses spacy and tokenizes the word value to count its number of
+        syllables. If spacy is unable to count its syllables, it returns 0."""
         nlp = spacy.load("en_core_web_sm")
         nlp.add_pipe("syllables", after="tagger")
         assert nlp.pipe_names == ["tok2vec", "tagger", "syllables", "parser",
@@ -22,26 +37,14 @@ class Word:
         try:
             syllables = [token._.syllables for token in word]
             syllables = syllables[0]
-            self.num_syllables = len(syllables)
+            return len(syllables)
         except:
-            self.num_syllables = 0
-
-        # pronunciation = pronouncing.phones_for_word(self.word)
-        # stresses = pronouncing.stresses(pronunciation[0])
-        # # 1 = stressed, 0 = unstressed
-        # for i in range(0, len(syllables)):
-        #     syllable_list = [syllables[i], stresses[i]]
-        #     self.syllable_stress.append(syllable_list)
-
-    def get_word_index(self):
-        return self.index
+            return 0
 
     def __str__(self):
+        """Returns a string representation of only the word value."""
         return f"{self.word}"
-# def test():
-#     testword = Word("beautiful", False)
-
-#     print(testword.num_syllables)
-#     print(testword.syllable_stress)
-
-# test()
+    
+    def __repr__(self):
+        """Returns an unambiguous representation of the Word."""
+        return f"Word('{self.word}', '{self.index}')"
