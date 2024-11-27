@@ -1,4 +1,4 @@
-# THE JABBERWOCK
+# JABBERWOCK
 
 ## Overview
 **_CSCI 3725 Computational Creativity_: M7 - Poetry Slam**
